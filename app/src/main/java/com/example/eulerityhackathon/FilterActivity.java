@@ -39,12 +39,14 @@ import static com.example.eulerityhackathon.MainActivity.TAG;
 public class FilterActivity extends AppCompatActivity {
     int xOffset = 0;
     int yOffset = 0;
+    String url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityFilterBinding binding = ActivityFilterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Bitmap originalBitmap = getIntent().getParcelableExtra("bitmap");
+        url = getIntent().getStringExtra("url");
         binding.ifv.setImageBitmap(originalBitmap);
         binding.ifv.setDrawingCacheEnabled(true);
 
@@ -204,6 +206,7 @@ public class FilterActivity extends AppCompatActivity {
                 String s = saveFile(binding);
 
                 intent.putExtra("filepath", s);
+                intent.putExtra("url", url);
                 binding.ifv.destroyDrawingCache();
                 startActivity(intent);
 

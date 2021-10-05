@@ -2,6 +2,7 @@ package com.example.eulerityhackathon;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,8 +22,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.example.eulerityhackathon.databinding.ActivityFilterBinding;
 import com.example.eulerityhackathon.databinding.ActivityTextBinding;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.eulerityhackathon.MainActivity.TAG;
@@ -31,17 +36,23 @@ public class TextActivity extends AppCompatActivity {
     int xOffset = 0;
     int yOffset = 0;
     int colorId = 0;
+    String url;
+    TextActivityViewModel vm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityTextBinding binding = ActivityTextBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+         vm = new ViewModelProvider(this).get(TextActivityViewModel.class);
+
 
         String path = getIntent().getStringExtra("filepath");
+        url = getIntent().getStringExtra("url");
         Bitmap originalBitmap = BitmapFactory.decodeFile(path);
 
         binding.ifv.setImageBitmap(originalBitmap);
+        binding.ifv.setDrawingCacheEnabled(true);
 
         String[] colors = new String[]{"Black", "White", "Yellow", "Blue", "Green", "Red"};
         ArrayAdapter cAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, colors);
@@ -78,7 +89,7 @@ public class TextActivity extends AppCompatActivity {
 
             }
         });
-
+        ;
         binding.btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +122,7 @@ public class TextActivity extends AppCompatActivity {
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createSubmissionDialog();
+                createSubmissionDialog(binding);
             }
         });
 
@@ -136,7 +147,7 @@ public class TextActivity extends AppCompatActivity {
         );
         binding.ifv.setImageBitmap(drawMultilineBitmap);
     }
-    public void  createSubmissionDialog(){
+    public void  createSubmissionDialog(ActivityTextBinding binding){
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Save Changes")
                 .setMessage("Do you want to save and upload changes?")
@@ -147,6 +158,9 @@ public class TextActivity extends AppCompatActivity {
                         //send file
                         //wait for confirm
                         //go back to main and clear stack
+                        String savedFilePath = saveFile(binding);
+                        vm.startUpload(savedFilePath, url);
+
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -158,6 +172,39 @@ public class TextActivity extends AppCompatActivity {
                 .create();
             dialog.show();
     }
+
+    public String saveFile(ActivityTextBinding binding) {
+        //BitmapDrawable draw = (BitmapDrawable) binding.ifv.getDrawable();
+        Bitmap bitmap = binding.ifv.getDrawingCache();
+
+        // binding.iv.setImageDrawable(binding.ifv.getDrawable());
+        FileOutputStream outStream = null;
+        File cache = getCacheDir();
+        File dir = new File(cache.getPath());
+        String fileName = "fimg.png";
+        File outFile = new File(dir, fileName);
+        try {
+            outStream = new FileOutputStream(outFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+
+            Log.i(TAG, "onClick: outfile path " + outFile.getPath());
+            String filePath = outFile.getPath();
+
+            Bitmap bitmap2 = BitmapFactory.decodeFile(filePath);
+
+
+            binding.iv.setImageBitmap(bitmap2);
+            binding.ifv.destroyDrawingCache();
+
+            return filePath;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     public Bitmap drawMultilineTextToBitmap(Bitmap inBitmap, String text, int textSize) {
         Log.i(TAG, "drawMultilineTextToBitmap: ");

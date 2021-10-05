@@ -1,5 +1,7 @@
 package com.example.eulerityhackathon;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -18,15 +20,10 @@ public class WebRepo {
     }*/
 
     private static HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
-    private static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(loggingInterceptor).build();
+    private static OkHttpClient client = new OkHttpClient.Builder().addInterceptor(loggingInterceptor).connectTimeout(1, TimeUnit.MINUTES).readTimeout(1, TimeUnit.MINUTES).writeTimeout(1, TimeUnit.MINUTES).build();
 
-    private static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://eulerity-hackathon.appspot.com/")
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
+    private static String baseUrl = "http://eulerity-hackathon.appspot.com/";
 
-    private WebService service = retrofit.create(WebService.class);
 
     /*public ArrayList<JsonListModel> getJsonList() {
         ArrayList<JsonListModel> list;
@@ -71,7 +68,16 @@ public class WebRepo {
 
     }*/
 
-    public static WebService createService() {
+    public static WebService createService(String url) {
+        if (!url.equals("")){
+            baseUrl = url;
+        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
         return retrofit.create(WebService.class);
     }
 }

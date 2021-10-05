@@ -19,10 +19,10 @@ import java.util.List;
 import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
-    private List<Bitmap> list = new ArrayList<>();
+    private List<ImageModel> list = new ArrayList<>();
     private Context context;
 
-    public void setList(ArrayList<Bitmap> list) {
+    public void setList(ArrayList<ImageModel> list) {
         Log.i(TAG, "setList: " + list.size());
         this.list = list;
     }
@@ -61,15 +61,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
         }
 
-        public void bind(Bitmap bm) {
+        public void bind(ImageModel im) {
             RvItemBinding binding = RvItemBinding.bind(itemView);
-            binding.ifv.setImageBitmap(bm);
+            binding.ifv.setImageBitmap(im.getBitmap());
             binding.itemCl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, FilterActivity.class);
-                    intent.putExtra("bitmap", bm);
+                    intent.putExtra("bitmap", im.getBitmap());
                     intent.putExtra("list_id", 0);
+                    intent.putExtra("url", im.getUrl());
                     context.startActivity(intent);
                 }
             });

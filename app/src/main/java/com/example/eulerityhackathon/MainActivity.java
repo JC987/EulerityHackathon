@@ -8,19 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.eulerityhackathon.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ArrayList<Bitmap> list = new ArrayList<>();
+        ArrayList<ImageModel> list = new ArrayList<>();
 
-
+        /*
         list.add(BitmapFactory.decodeResource(getResources(),
                 R.drawable.halo2));
 
@@ -42,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         list.add(BitmapFactory.decodeResource(getResources(),
                 R.drawable.halo4));
-
+*/
 
       //https://images.pexels.com/photos/160846/french-bulldog-summer-smile-joy-160846.jpeg
 
@@ -60,11 +55,11 @@ public class MainActivity extends AppCompatActivity {
         iv.setLayoutParams(parms);
         adapter.setList(list);
         MainActivityViewModel vm = new ViewModelProvider(this).get(MainActivityViewModel.class);
-        vm.bitmap.observe(this, new Observer<Bitmap>() {
+        vm.image.observe(this, new Observer<ImageModel>() {
             @Override
-            public void onChanged(Bitmap bitmap) {
-                if (bitmap != null) {
-                    list.add(bitmap);
+            public void onChanged(ImageModel imageModel) {
+                if (imageModel != null) {
+                    list.add(imageModel);
                     adapter.notifyDataSetChanged();
                     Log.i(TAG, "onChanged: bitmap");
                 }

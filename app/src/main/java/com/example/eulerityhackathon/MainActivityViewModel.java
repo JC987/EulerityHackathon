@@ -2,25 +2,19 @@ package com.example.eulerityhackathon;
 
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,7 +24,7 @@ import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
-    public MutableLiveData<Bitmap> bitmap = new MutableLiveData<>();
+    public MutableLiveData<ImageModel> image = new MutableLiveData<ImageModel>();
     private Context context;
     private WebService service;
     private ArrayList<JsonListModel> list;
@@ -38,7 +32,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         context = application.getApplicationContext();
-        service = WebRepo.createService();
+        service = WebRepo.createService("");
         getJsonList();
     }
 
@@ -79,7 +73,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                             .get();
                     Log.i(TAG, "onCreate: got d");
                     BitmapDrawable bd = (BitmapDrawable) d;
-                    bitmap.postValue(bd.getBitmap());
+                    image.postValue(new ImageModel(bd.getBitmap(), url));
 
                 } catch (Exception e) {
                     e.printStackTrace();
