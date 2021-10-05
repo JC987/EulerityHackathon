@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -120,6 +121,7 @@ public class FilterActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 float scaledProgress = i / 10f;
                 binding.tvSat.setText("Saturation Scale: " + scaledProgress);
+                binding.ifv.destroyDrawingCache();
                 binding.ifv.setSaturation(scaledProgress);
             }
 
@@ -191,77 +193,47 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
-        binding.btnUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                yOffset += 10;
-                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
-                        "This is my string message");
-                binding.iv.setImageBitmap(drawMultilineBitmap);
-            }
-        });
-        binding.btnDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                yOffset -= 10;
-                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
-                        "This is my string message");
-                binding.iv.setImageBitmap(drawMultilineBitmap);
-            }
-        });
-        binding.btnLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                xOffset += 10;
-                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
-                        "This is my string message");
-                binding.ifv.setImageBitmap(drawMultilineBitmap);
-            }
-        });
-        binding.btnRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                xOffset -= 10;
-                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
-                        "This is my string message");
-                binding.ifv.setImageBitmap(drawMultilineBitmap);
-            }
-        });
+
 
 
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(FilterActivity.this, TextActivity.class);
 
-                //BitmapDrawable draw = (BitmapDrawable) binding.ifv.getDrawable();
-                Bitmap bitmap = binding.ifv.getDrawingCache();
+                String s = saveFile(binding);
 
-                // binding.iv.setImageDrawable(binding.ifv.getDrawable());
-                FileOutputStream outStream = null;
-                File cache = getCacheDir();
-                File dir = new File(cache.getPath());
-                String fileName = "fimg.png";
-                File outFile = new File(dir, fileName);
-                try {
-                    outStream = new FileOutputStream(outFile);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-                    outStream.flush();
-                    outStream.close();
-
-                    Log.i(TAG, "onClick: outfile path " + outFile.getPath());
-                    String filePath = outFile.getPath();
-                    Bitmap bitmap2 = BitmapFactory.decodeFile(filePath);
-
-
-                    binding.iv.setImageBitmap(bitmap2);
-                    binding.ifv.destroyDrawingCache();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                intent.putExtra("filepath", s);
+                binding.ifv.destroyDrawingCache();
+                startActivity(intent);
 
             }
         });
+    }
+
+    public String saveFile(ActivityFilterBinding binding) {
+        //BitmapDrawable draw = (BitmapDrawable) binding.ifv.getDrawable();
+        Bitmap bitmap = binding.ifv.getDrawingCache();
+
+        // binding.iv.setImageDrawable(binding.ifv.getDrawable());
+        FileOutputStream outStream = null;
+        File cache = getCacheDir();
+        File dir = new File(cache.getPath());
+        String fileName = "fimg.png";
+        File outFile = new File(dir, fileName);
+        try {
+            outStream = new FileOutputStream(outFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+
+            Log.i(TAG, "onClick: outfile path " + outFile.getPath());
+            String filePath = outFile.getPath();
+            return filePath;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public Bitmap drawMultilineTextToBitmap(Context gContext,
