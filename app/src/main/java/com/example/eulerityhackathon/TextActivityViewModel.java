@@ -25,10 +25,12 @@ import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class TextActivityViewModel extends ViewModel {
     public MutableLiveData<Bitmap> bitmap = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
     private WebService service = WebRepo.createService("");
 
     public void startUpload(String filepath, String originalUrl) {
+        isLoading.setValue(false);
         service.getUploadUrl().enqueue(new Callback<JsonUrlModel>() {
             @Override
             public void onResponse(Call<JsonUrlModel> call, Response<JsonUrlModel> response) {
@@ -75,6 +77,7 @@ public class TextActivityViewModel extends ViewModel {
                 if (responseBody != null) {
                     try {
                         Log.i(TAG, "onResponse: " + responseBody.string());
+                        isLoading.postValue(true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -83,6 +86,7 @@ public class TextActivityViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                isLoading.postValue(false);
                 Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });

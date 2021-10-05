@@ -21,9 +21,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:minHeight="300dp"
-        android:src="@drawable/halo1"
         android:scaleType="fitCenter"
-
         android:id="@+id/ifv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

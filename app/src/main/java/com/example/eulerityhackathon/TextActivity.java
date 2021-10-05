@@ -2,10 +2,12 @@ package com.example.eulerityhackathon;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,7 +48,16 @@ public class TextActivity extends AppCompatActivity {
 
          vm = new ViewModelProvider(this).get(TextActivityViewModel.class);
 
-
+         vm.isLoading.observe(this, new Observer<Boolean>() {
+             @Override
+             public void onChanged(Boolean aBoolean) {
+                 if (aBoolean) {
+                     binding.pb.setVisibility(View.GONE);
+                 } else {
+                     binding.pb.setVisibility(View.VISIBLE);
+                 }
+             }
+         });
         String path = getIntent().getStringExtra("filepath");
         url = getIntent().getStringExtra("url");
         Bitmap originalBitmap = BitmapFactory.decodeFile(path);
@@ -166,7 +177,10 @@ public class TextActivity extends AppCompatActivity {
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        Intent intent = new Intent(TextActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        TextActivity.this.finish();
                     }
                 })
                 .create();

@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,6 +29,8 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Context context;
     private WebService service;
     private ArrayList<JsonListModel> list;
+    private HashSet<JsonListModel> set = new HashSet<>();
+    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -37,6 +40,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     private void getJsonList() {
+        isLoading.postValue(true);
         service.getJson().enqueue(new Callback<List<JsonListModel>>() {
             @Override
             public void onResponse(Call<List<JsonListModel>> call, Response<List<JsonListModel>> response) {
@@ -46,6 +50,8 @@ public class MainActivityViewModel extends AndroidViewModel {
                         Log.i(TAG, "onResponse: " + m.getUrl());
                         getImg(m.getUrl());
                     }
+                    isLoading.postValue(false);
+
                 }
             }
 
@@ -65,8 +71,8 @@ public class MainActivityViewModel extends AndroidViewModel {
                             .with(context)
                             .load(url)
                             .apply(new RequestOptions()
+                                    .placeholder(R.drawable.halo4)
                                     .override(300,300)
-                                    .placeholder(R.mipmap.ic_launcher)
                                     .fitCenter()
                             )
                             .submit()
@@ -76,6 +82,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                     image.postValue(new ImageModel(bd.getBitmap(), url));
 
                 } catch (Exception e) {
+                    Log.i(TAG, "run: failed to load " + url);
                     e.printStackTrace();
                 }
             }

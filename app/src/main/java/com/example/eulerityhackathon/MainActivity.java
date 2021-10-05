@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -27,19 +28,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         ArrayList<ImageModel> list = new ArrayList<>();
-
-        /*
-        list.add(BitmapFactory.decodeResource(getResources(),
-                R.drawable.halo2));
-
-        list.add(BitmapFactory.decodeResource(getResources(),
-                R.drawable.halo3));
-
-        list.add(BitmapFactory.decodeResource(getResources(),
-                R.drawable.halo4));
-*/
-
-      //https://images.pexels.com/photos/160846/french-bulldog-summer-smile-joy-160846.jpeg
 
         Log.i(TAG, "onCreate: " + list.size());
         CustomAdapter adapter = new CustomAdapter(this);
@@ -62,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
                     list.add(imageModel);
                     adapter.notifyDataSetChanged();
                     Log.i(TAG, "onChanged: bitmap");
+                }
+            }
+        });
+        vm.isLoading.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean) {
+                    binding.pb.setVisibility(View.VISIBLE);
+                } else {
+                    binding.pb.setVisibility(View.GONE);
                 }
             }
         });
