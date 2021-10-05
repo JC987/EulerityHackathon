@@ -67,7 +67,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
             binding.itemCl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    context.startActivity(new Intent(context, FilterActivity.class));
+                    Intent intent = new Intent(context, FilterActivity.class);
+                    intent.putExtra("bitmap", bm);
+                    intent.putExtra("list_id", 0);
+                    context.startActivity(intent);
                 }
             });
             Log.i(TAG, "bind: ");

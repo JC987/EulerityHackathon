@@ -36,12 +36,17 @@ import java.io.IOException;
 import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class FilterActivity extends AppCompatActivity {
-
+    int xOffset = 0;
+    int yOffset = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityFilterBinding binding = ActivityFilterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Bitmap originalBitmap = getIntent().getParcelableExtra("bitmap");
+        binding.ifv.setImageBitmap(originalBitmap);
+        binding.ifv.setDrawingCacheEnabled(true);
+
         binding.seekSat.setProgress(10);
         binding.seekBright.setProgress(10);
         binding.seekWarmth.setProgress(10);
@@ -95,12 +100,18 @@ public class FilterActivity extends AppCompatActivity {
         //canvas.drawText("My Text\n My Text My \n Text My Text", 0, 72 * scale, paint);
 
         //binding.ifv.setImageBitmap(cp);
-/*
+
+        /*
         BitmapDrawable draw = (BitmapDrawable) binding.ifv.getDrawable();
         Bitmap oldb = draw.getBitmap();
-        Bitmap newb = drawTextToBitmap(this, oldb, "Hello world Hello world Hello world Hello world Hello world", binding);
+        Bitmap newb = drawTextToBitmap(this, oldb, "Hello world Hello world ", binding);
         binding.iv.setImageBitmap(newb);
 */
+       // BitmapDrawable drawableBit = binding.ifv
+        Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(this, originalBitmap,
+                "This is my string message but now it is much much longer! So very long in fact I don't think this will ever fit on anything again."
+        );
+        binding.iv.setImageBitmap(drawMultilineBitmap);
 
 
 
@@ -180,12 +191,50 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                yOffset += 10;
+                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
+                        "This is my string message");
+                binding.iv.setImageBitmap(drawMultilineBitmap);
+            }
+        });
+        binding.btnDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                yOffset -= 10;
+                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
+                        "This is my string message");
+                binding.iv.setImageBitmap(drawMultilineBitmap);
+            }
+        });
+        binding.btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                xOffset += 10;
+                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
+                        "This is my string message");
+                binding.ifv.setImageBitmap(drawMultilineBitmap);
+            }
+        });
+        binding.btnRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                xOffset -= 10;
+                Bitmap drawMultilineBitmap = drawMultilineTextToBitmap(FilterActivity.this, originalBitmap,
+                        "This is my string message");
+                binding.ifv.setImageBitmap(drawMultilineBitmap);
+            }
+        });
+
+
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
 
-                BitmapDrawable draw = (BitmapDrawable) binding.ifv.getDrawable();
+                //BitmapDrawable draw = (BitmapDrawable) binding.ifv.getDrawable();
                 Bitmap bitmap = binding.ifv.getDrawingCache();
 
                 // binding.iv.setImageDrawable(binding.ifv.getDrawable());
@@ -214,6 +263,59 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
     }
+
+    public Bitmap drawMultilineTextToBitmap(Context gContext,
+                                            Bitmap inBitmap,
+                                            String gText) {
+
+        // prepare canvas
+        Resources resources = gContext.getResources();
+        float scale = resources.getDisplayMetrics().density;
+        Bitmap bitmap = inBitmap;
+
+        android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
+        // set default bitmap config if none
+        if(bitmapConfig == null) {
+            bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+        }
+        // resource bitmaps are imutable,
+        // so we need to convert it to mutable one
+        bitmap = bitmap.copy(bitmapConfig, true);
+
+        Canvas canvas = new Canvas(bitmap);
+
+        // new antialiased Paint
+        TextPaint paint=new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        // text color - #3D3D3D
+        paint.setColor(Color.rgb(61, 61, 61));
+        // text size in pixels
+        paint.setTextSize((int) (14 * scale));
+        // text shadow
+        paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+
+        // set text width to canvas width minus 16dp padding
+        int textWidth = canvas.getWidth() - (int) (16 * scale);
+
+        // init StaticLayout for text
+        StaticLayout textLayout = new StaticLayout(
+                gText, paint, textWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+
+        // get height of multiline text
+        int textHeight = textLayout.getHeight();
+
+        // get position of text's top left corner
+        float x = (bitmap.getWidth() - textWidth)/2;
+        float y = (bitmap.getHeight() - textHeight)/2;
+
+        // draw text to the Canvas center
+        canvas.save();
+        canvas.translate(x - xOffset, y - yOffset);
+        textLayout.draw(canvas);
+        canvas.restore();
+
+        return bitmap;
+    }
+
 
     public Bitmap drawTextToBitmap(Context mContext, Bitmap resourceId, String mText, ActivityFilterBinding binding) {
         try {
