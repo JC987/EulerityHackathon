@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -27,9 +26,8 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MutableLiveData<ImageModel> image = new MutableLiveData<ImageModel>();
     private Context context;
-    private WebService service;
+    private WebService service = null;
     private ArrayList<JsonListModel> list;
-    private HashSet<JsonListModel> set = new HashSet<>();
     public MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
     public MainActivityViewModel(@NonNull Application application) {
@@ -51,7 +49,6 @@ public class MainActivityViewModel extends AndroidViewModel {
                         getImg(m.getUrl());
                     }
                     isLoading.postValue(false);
-
                 }
             }
 
@@ -64,27 +61,25 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public void getImg(String url) {
 
-        Runnable r = new Runnable() {
-            public void run() {
-                try {
-                    Drawable d = Glide
-                            .with(context)
-                            .load(url)
-                            .apply(new RequestOptions()
-                                    .placeholder(R.drawable.halo4)
-                                    .override(300,300)
-                                    .fitCenter()
-                            )
-                            .submit()
-                            .get();
-                    Log.i(TAG, "onCreate: got d");
-                    BitmapDrawable bd = (BitmapDrawable) d;
-                    image.postValue(new ImageModel(bd.getBitmap(), url));
+        Runnable r = () -> {
+            try {
+                Drawable d = Glide
+                        .with(context)
+                        .load(url)
+                        .apply(new RequestOptions()
+                                .placeholder(R.drawable.halo4)
+                                .override(300,300)
+                                .fitCenter()
+                        )
+                        .submit()
+                        .get();
+                Log.i(TAG, "onCreate: got d");
+                BitmapDrawable bd = (BitmapDrawable) d;
+                image.postValue(new ImageModel(bd.getBitmap(), url));
 
-                } catch (Exception e) {
-                    Log.i(TAG, "run: failed to load " + url);
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                Log.i(TAG, "run: failed to load " + url);
+                e.printStackTrace();
             }
         };
 

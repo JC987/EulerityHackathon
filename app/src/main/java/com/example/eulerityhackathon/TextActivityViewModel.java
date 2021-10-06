@@ -1,18 +1,11 @@
 package com.example.eulerityhackathon;
 
-import android.app.Application;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -24,13 +17,13 @@ import retrofit2.Response;
 import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class TextActivityViewModel extends ViewModel {
-    public MutableLiveData<Bitmap> bitmap = new MutableLiveData<>();
-    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> isLoaded = new MutableLiveData<>(null);
+    public MutableLiveData<Boolean> hasFailed = new MutableLiveData<>(false);
 
     private WebService service = WebRepo.createService("");
 
     public void startUpload(String filepath, String originalUrl) {
-        isLoading.setValue(false);
+        isLoaded.setValue(false);
         service.getUploadUrl().enqueue(new Callback<JsonUrlModel>() {
             @Override
             public void onResponse(Call<JsonUrlModel> call, Response<JsonUrlModel> response) {
@@ -45,6 +38,7 @@ public class TextActivityViewModel extends ViewModel {
             @Override
             public void onFailure(Call<JsonUrlModel> call, Throwable t) {
                 Log.e(TAG, "onFailure: " + t.getMessage());
+                hasFailed.setValue(true);
             }
         });
     }
@@ -62,8 +56,7 @@ public class TextActivityViewModel extends ViewModel {
             File file = new File(filepath);
             Log.i("Register", "Nombre del archivo " + file.getName());
             // create RequestBody instance from file
-            RequestBody requestFile =
-                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            // RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             filePart = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
 
         }
@@ -77,7 +70,7 @@ public class TextActivityViewModel extends ViewModel {
                 if (responseBody != null) {
                     try {
                         Log.i(TAG, "onResponse: " + responseBody.string());
-                        isLoading.postValue(true);
+                        isLoaded.postValue(true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -86,7 +79,8 @@ public class TextActivityViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                isLoading.postValue(false);
+                isLoaded.postValue(false);
+                hasFailed.setValue(true);
                 Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });

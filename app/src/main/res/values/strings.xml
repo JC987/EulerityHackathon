@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">EulerityHackathon</string>
+    <string name="sat_text">Saturation Scale: %1$s</string>
+    <string name="bright_text">Brightness Scale: %1$s</string>
+    <string name="contrast_text">Contrast Scale: %1$s</string>
+    <string name="warmth_text">Warmth Scale: %1$s</string>
+    <string name="continue_text">Continue</string>
+    <string name="save_text">Save</string>
+    <string name="apply_text">Apply text changes!</string>
+    <string name="message_hint">Enter your text</string>
+    <string name="size_hint">Enter the text size</string>
+    <string name="text_pos">Text Position: "</string>
+
 </resources>

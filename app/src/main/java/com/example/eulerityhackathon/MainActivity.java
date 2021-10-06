@@ -5,9 +5,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +18,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "EulerityTAG";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +34,9 @@ public class MainActivity extends AppCompatActivity {
         binding.mainRv.addItemDecoration( new DividerItemDecoration(this, LinearLayout.VERTICAL));
         binding.mainRv.setLayoutManager(new LinearLayoutManager(this));
 
-        int width = 60;
-        int height = 60;
-        ImageView iv = new ImageView(this);
-        LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(width,height);
-        iv.setLayoutParams(parms);
         adapter.setList(list);
         MainActivityViewModel vm = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
         vm.image.observe(this, new Observer<ImageModel>() {
             @Override
             public void onChanged(ImageModel imageModel) {
@@ -63,7 +57,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 }

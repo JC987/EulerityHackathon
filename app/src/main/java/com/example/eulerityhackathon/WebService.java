@@ -13,14 +13,14 @@ import retrofit2.http.Part;
 
 public interface WebService {
     @GET("image")
-    public Call<List<JsonListModel>> getJson();
+    Call<List<JsonListModel>> getJson();
 
     @GET("upload")
-    public Call<JsonUrlModel> getUploadUrl();
+    Call<JsonUrlModel> getUploadUrl();
 
     @Multipart
     @POST(".")
-    public Call<ResponseBody> postImg(
+    Call<ResponseBody> postImg(
             @Part MultipartBody.Part filePart,
             @Part("appid") RequestBody appid,
             @Part("original") RequestBody original

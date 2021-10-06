@@ -13,7 +13,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
             tools:context=".FilterActivity">
 
             <ProgressBar
@@ -33,10 +35,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:text="Apply text changes!"
+                android:text="@string/apply_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnDown"
+                app:layout_constraintTop_toBottomOf="@id/spnColor"
 
                 />
 
@@ -45,19 +47,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="save"
+                android:text="@string/save_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnApply"
+                app:layout_constraintTop_toBottomOf="@id/btnDown"
 
                 />
 
-            <View
+
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/teal_200"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:id="@+id/filterDivider"
+                android:hint="@string/message_hint"
+                android:id="@+id/etMessage"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ifv"/>
@@ -66,20 +69,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:hint="Enter your text"
-                android:id="@+id/etMessage"
-                android:focusedByDefault="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filterDivider"/>
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="Enter the text size"
+                android:hint="@string/size_hint"
                 android:id="@+id/etSize"
-                android:focusedByDefault="false"
                 android:inputType="number"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -100,40 +91,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="Text Position: "
+                android:text="@string/text_pos"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spnColor" />
+                app:layout_constraintTop_toBottomOf="@id/btnApply" />
 
-            <!--
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTextPos">
-
-                <Button
-                    android:layout_width=""
-                    android:layout_height=""
-
-            </LinearLayout>
--->
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="up"
+                android:src="@drawable/ic_baseline_arrow_upward_24"
                 android:id="@+id/btnUp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvTextPos"/>
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Left"
+                android:src="@drawable/ic_baseline_arrow_back_24"
                 android:id="@+id/btnLeft"
                 app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintEnd_toStartOf="@id/btnUp"
@@ -141,20 +117,20 @@
                 app:layout_constraintTop_toBottomOf="@id/btnUp"/>
 
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Right"
+                android:src="@drawable/ic_baseline_arrow_forward_24"
                 android:id="@+id/btnRight"
                 app:layout_constraintHorizontal_bias="0.25"
                 app:layout_constraintStart_toEndOf="@id/btnUp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btnUp"/>
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Down"
+                android:src="@drawable/ic_baseline_arrow_downward_24"
                 android:id="@+id/btnDown"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -168,20 +144,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:scaleType="fitCenter"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0" />
-
-            <ImageView
-                android:id="@+id/iv"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_margin="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnSave" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

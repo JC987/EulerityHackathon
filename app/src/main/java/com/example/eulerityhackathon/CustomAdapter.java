@@ -2,7 +2,6 @@ package com.example.eulerityhackathon;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,15 +63,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         public void bind(ImageModel im) {
             RvItemBinding binding = RvItemBinding.bind(itemView);
             binding.ifv.setImageBitmap(im.getBitmap());
-            binding.itemCl.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, FilterActivity.class);
-                    intent.putExtra("bitmap", im.getBitmap());
-                    intent.putExtra("list_id", 0);
-                    intent.putExtra("url", im.getUrl());
-                    context.startActivity(intent);
-                }
+            binding.itemCl.setOnClickListener(view -> {
+                Intent intent = new Intent(context, FilterActivity.class);
+                intent.putExtra("bitmap", im.getBitmap());
+                intent.putExtra("url", im.getUrl());
+                context.startActivity(intent);
             });
             Log.i(TAG, "bind: ");
         }
