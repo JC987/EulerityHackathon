@@ -1,4 +1,4 @@
-package com.example.eulerityhackathon;
+package com.example.eulerityhackathon.web;
 
 import java.util.concurrent.TimeUnit;
 

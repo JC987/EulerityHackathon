@@ -4,6 +4,11 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.eulerityhackathon.models.JsonUrlModel;
+import com.example.eulerityhackathon.web.WebRepo;
+import com.example.eulerityhackathon.web.WebService;
+
 import java.io.File;
 import java.io.IOException;
 import okhttp3.MediaType;

@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.eulerityhackathon.databinding.ActivityMainBinding;
+import com.example.eulerityhackathon.models.ImageModel;
 
 import java.util.ArrayList;
 

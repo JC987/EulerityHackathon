@@ -12,6 +12,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.eulerityhackathon.models.ImageModel;
+import com.example.eulerityhackathon.models.JsonListModel;
+import com.example.eulerityhackathon.web.WebRepo;
+import com.example.eulerityhackathon.web.WebService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +71,7 @@ public class MainActivityViewModel extends AndroidViewModel {
                         .with(context)
                         .load(url)
                         .apply(new RequestOptions()
-                                .placeholder(R.drawable.halo4)
+                                .placeholder(R.mipmap.ic_launcher)
                                 .override(300,300)
                                 .fitCenter()
                         )

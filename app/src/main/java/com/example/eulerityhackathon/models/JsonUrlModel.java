@@ -1,4 +1,4 @@
-package com.example.eulerityhackathon;
+package com.example.eulerityhackathon.models;
 
 public class JsonUrlModel {
     private String url;

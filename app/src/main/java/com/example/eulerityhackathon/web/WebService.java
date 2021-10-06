@@ -1,4 +1,7 @@
-package com.example.eulerityhackathon;
+package com.example.eulerityhackathon.web;
+
+import com.example.eulerityhackathon.models.JsonListModel;
+import com.example.eulerityhackathon.models.JsonUrlModel;
 
 import java.util.List;
 

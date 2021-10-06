@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eulerityhackathon.databinding.RvItemBinding;
+import com.example.eulerityhackathon.models.ImageModel;
 
 import java.util.ArrayList;
 import java.util.List;
