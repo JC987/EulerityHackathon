@@ -2,13 +2,9 @@ package com.example.eulerityhackathon;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,14 +20,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
-import com.example.eulerityhackathon.databinding.ActivityFilterBinding;
 import com.example.eulerityhackathon.databinding.ActivityTextBinding;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import static com.example.eulerityhackathon.MainActivity.TAG;
 
@@ -48,16 +40,15 @@ public class TextActivity extends AppCompatActivity {
         ActivityTextBinding binding = ActivityTextBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setTitle("Add Text");
+
+
         vm = new ViewModelProvider(this).get(TextActivityViewModel.class);
 
         vm.isLoaded.observe(this, aBoolean -> {
             if (aBoolean != null) {
                 if (aBoolean) {
                     binding.pb.setVisibility(View.GONE);
-
-                    //Intent intent = new Intent(TextActivity.this, MainActivity.class);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                   // startActivity(intent);
                     setResult(Activity.RESULT_OK);
                     TextActivity.this.finish();
                 } else {
@@ -178,7 +169,7 @@ public class TextActivity extends AppCompatActivity {
         FileOutputStream outStream = null;
         File cache = getCacheDir();
         File dir = new File(cache.getPath());
-        String fileName = "fimg.png";
+        String fileName = "filtered_img.png";
         File outFile = new File(dir, fileName);
         try {
             outStream = new FileOutputStream(outFile);

@@ -29,22 +29,21 @@ public class FilterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityFilterBinding binding = ActivityFilterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        setTitle("Apply Filter");
+
+
         Bitmap originalBitmap = getIntent().getParcelableExtra("bitmap");
         String url = getIntent().getStringExtra("url");
         binding.ifv.setImageBitmap(originalBitmap);
         binding.ifv.setDrawingCacheEnabled(true);
 
-        // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
-        ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+
+        ActivityResultLauncher<Intent> launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getResultCode() == Activity.RESULT_OK) {
-                            // There are no request codes
-                            Log.i(TAG, "onActivityResult: ");
-                            finish();
-                        }
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Log.i(TAG, "onActivityResult: ");
+                        finish();
                     }
                 });
 
@@ -63,9 +62,10 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 float scaledProgress = i / 10f;
-                binding.tvSat.setText(String.format(getString(R.string.sat_text),  scaledProgress + ""));
                 binding.ifv.destroyDrawingCache();
                 binding.ifv.setSaturation(scaledProgress);
+                binding.tvSat.setText(String.format(getString(R.string.sat_text),  scaledProgress + ""));
+
             }
 
             @Override
@@ -83,8 +83,10 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 float scaledProgress = i / 10f;
-                binding.tvBright.setText(String.format(getString(R.string.bright_text), scaledProgress + ""));
+                binding.ifv.destroyDrawingCache();
                 binding.ifv.setBrightness(scaledProgress);
+                binding.tvBright.setText(String.format(getString(R.string.bright_text), scaledProgress + ""));
+
             }
 
             @Override
@@ -102,8 +104,9 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 float scaledProgress = i / 10f;
-                binding.tvWarmth.setText(String.format(getString(R.string.warmth_text), scaledProgress + ""));
+                binding.ifv.destroyDrawingCache();
                 binding.ifv.setWarmth(scaledProgress);
+                binding.tvWarmth.setText(String.format(getString(R.string.warmth_text), scaledProgress + ""));
             }
 
             @Override
@@ -121,8 +124,10 @@ public class FilterActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 float scaledProgress = i / 10f;
-                binding.tvContrast.setText(String.format(getString(R.string.contrast_text), scaledProgress + ""));
+                binding.ifv.destroyDrawingCache();
                 binding.ifv.setContrast(scaledProgress);
+                binding.tvContrast.setText(String.format(getString(R.string.contrast_text), scaledProgress + ""));
+
             }
 
             @Override
@@ -136,7 +141,6 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
-
         binding.btnCont.setOnClickListener(view -> {
             Intent intent = new Intent(FilterActivity.this, TextActivity.class);
             String s = saveFile(binding);
@@ -144,7 +148,7 @@ public class FilterActivity extends AppCompatActivity {
             intent.putExtra("url", url);
             binding.ifv.destroyDrawingCache();
 
-            someActivityResultLauncher.launch(intent);
+            launcher.launch(intent);
 
         });
     }

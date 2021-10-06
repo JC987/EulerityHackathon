@@ -32,7 +32,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     private Context context;
     private WebService service = null;
     private ArrayList<JsonListModel> list;
-    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -41,8 +40,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         getJsonList();
     }
 
-    private void getJsonList() {
-        isLoading.postValue(true);
+    public void getJsonList() {
         service.getJson().enqueue(new Callback<List<JsonListModel>>() {
             @Override
             public void onResponse(Call<List<JsonListModel>> call, Response<List<JsonListModel>> response) {
@@ -52,7 +50,6 @@ public class MainActivityViewModel extends AndroidViewModel {
                         Log.i(TAG, "onResponse: " + m.getUrl());
                         getImg(m.getUrl());
                     }
-                    isLoading.postValue(false);
                 }
             }
 
@@ -63,7 +60,7 @@ public class MainActivityViewModel extends AndroidViewModel {
         });
     }
 
-    public void getImg(String url) {
+    private void getImg(String url) {
 
         Runnable r = () -> {
             try {
@@ -71,7 +68,6 @@ public class MainActivityViewModel extends AndroidViewModel {
                         .with(context)
                         .load(url)
                         .apply(new RequestOptions()
-                                .placeholder(R.mipmap.ic_launcher)
                                 .override(300,300)
                                 .fitCenter()
                         )

@@ -20,7 +20,7 @@ import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
     private List<ImageModel> list = new ArrayList<>();
-    private Context context;
+    private final Context context;
 
     public void setList(ArrayList<ImageModel> list) {
         Log.i(TAG, "setList: " + list.size());
