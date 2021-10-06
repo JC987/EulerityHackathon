@@ -1,26 +1,18 @@
 package com.example.eulerityhackathon;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.SeekBar;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.eulerityhackathon.databinding.ActivityFilterBinding;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class FilterActivity extends AppCompatActivity {
 
@@ -31,22 +23,18 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setTitle("Apply Filter");
 
-
         Bitmap originalBitmap = getIntent().getParcelableExtra("bitmap");
         String url = getIntent().getStringExtra("url");
         binding.ifv.setImageBitmap(originalBitmap);
         binding.ifv.setDrawingCacheEnabled(true);
 
-
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Log.i(TAG, "onActivityResult: ");
                         finish();
                     }
                 });
-
 
         binding.seekSat.setProgress(10);
         binding.seekBright.setProgress(10);
@@ -167,9 +155,7 @@ public class FilterActivity extends AppCompatActivity {
             outStream.flush();
             outStream.close();
 
-            Log.i(TAG, "onClick: outfile path " + outFile.getPath());
-            String filePath = outFile.getPath();
-            return filePath;
+            return outFile.getPath();
         } catch (IOException e) {
             e.printStackTrace();
         }

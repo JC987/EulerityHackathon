@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,8 +23,6 @@ import com.example.eulerityhackathon.databinding.ActivityTextBinding;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class TextActivity extends AppCompatActivity {
     private int xOffset = 0;
@@ -176,10 +173,7 @@ public class TextActivity extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
             outStream.flush();
             outStream.close();
-
-            Log.i(TAG, "onClick: outfile path " + outFile.getPath());
             String filePath = outFile.getPath();
-
             binding.ifv.destroyDrawingCache();
 
             return filePath;
@@ -191,23 +185,18 @@ public class TextActivity extends AppCompatActivity {
 
 
     public Bitmap drawMultilineTextToBitmap(Bitmap bitmap, String text, int textSize) {
-        Log.i(TAG, "drawMultilineTextToBitmap: ");
-
         Resources resources = getResources();
         float scale = resources.getDisplayMetrics().density;
-
         Bitmap.Config bitmapConfig = Bitmap.Config.ARGB_8888;
-
         bitmap = bitmap.copy(bitmapConfig, true);
-        Canvas canvas = new Canvas(bitmap);
 
+        Canvas canvas = new Canvas(bitmap);
         TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(colorId);
         paint.setTextSize((int) (textSize * scale));
-        // paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 
         int textWidth = canvas.getWidth() - (int) (16 * scale);
-        StaticLayout textLayout = new StaticLayout(text, paint, textWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+        StaticLayout textLayout =new StaticLayout(text, paint, textWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
 
         int textHeight = textLayout.getHeight();
         float x = (bitmap.getWidth() - textWidth)/2f;
@@ -220,6 +209,4 @@ public class TextActivity extends AppCompatActivity {
 
         return bitmap;
     }
-
-
 }

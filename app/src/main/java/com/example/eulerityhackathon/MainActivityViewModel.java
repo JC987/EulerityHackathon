@@ -4,27 +4,21 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.eulerityhackathon.models.ImageModel;
 import com.example.eulerityhackathon.models.JsonListModel;
 import com.example.eulerityhackathon.web.WebRepo;
 import com.example.eulerityhackathon.web.WebService;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.example.eulerityhackathon.MainActivity.TAG;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
@@ -47,7 +41,6 @@ public class MainActivityViewModel extends AndroidViewModel {
                 list = (ArrayList<JsonListModel>) response.body();
                 if (list != null) {
                     for (JsonListModel m : list) {
-                        Log.i(TAG, "onResponse: " + m.getUrl());
                         getImg(m.getUrl());
                     }
                 }
@@ -55,7 +48,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
             @Override
             public void onFailure(Call<List<JsonListModel>> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
+                t.printStackTrace();
             }
         });
     }
@@ -73,12 +66,10 @@ public class MainActivityViewModel extends AndroidViewModel {
                         )
                         .submit()
                         .get();
-                Log.i(TAG, "onCreate: got d");
                 BitmapDrawable bd = (BitmapDrawable) d;
                 image.postValue(new ImageModel(bd.getBitmap(), url));
 
             } catch (Exception e) {
-                Log.i(TAG, "run: failed to load " + url);
                 e.printStackTrace();
             }
         };

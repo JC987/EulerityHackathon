@@ -9,7 +9,7 @@
     <string name="apply_text">Apply text changes!</string>
     <string name="message_hint">Enter your text</string>
     <string name="size_hint">Enter the text size</string>
-    <string name="text_pos">Text Position: "</string>
-    <string name="text">Text Appearance: "</string>
+    <string name="text_pos">Text Position: </string>
+    <string name="text">Text Appearance: </string>
 
 </resources>
